@@ -3,7 +3,7 @@ import Classroom from "./Classroom";
 
 function App() {
   const [username, setUsername] = useState("");
-  const [isLoggedIn, setLoggedIn] = useState(true);
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleSubmit = async () => {
     try {

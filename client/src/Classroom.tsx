@@ -25,7 +25,7 @@ const Classroom = ({ username }: { username: string }) => {
                 }}>
                     {menus.map((menu) => {
                         return (
-                            <li>
+                            <li key={menu}>
                                 <button style={{
                                     fontFamily: "sans-serif",
                                     padding: "12px 24px",

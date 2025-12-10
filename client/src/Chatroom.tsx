@@ -1,10 +1,32 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 const Chatroom = ({ username }: { username: string }) => {
   const [msg, setMsg] = useState("");
+  const [msgs, setMsgs] = useState<{ message: string, username: string }[]>([]);
+  const socketRef = useRef<Socket | null>(null);
   const handleSendMessage = () => {
-
+    if (socketRef.current) {
+      socketRef.current.emit("send_message", {
+        message: msg,
+        username
+      });
+      setMsg("");
+    }
   }
+
+  useEffect(() => {
+    const socket = io("http://localhost:5555");
+    socketRef.current = socket;
+
+    socket.on("receive_message", (data) => {
+      setMsgs((prev) => [...prev, data]);
+    })
+
+    return (() => {
+      socket.disconnect();
+    })
+  }, [])
 
   return (
     <div style={{
@@ -30,9 +52,10 @@ const Chatroom = ({ username }: { username: string }) => {
         flexDirection: "column",
         gap: "1rem"
       }}>
-        <Message msgObj={{ msg: "hello", mine: "arvindh" === username }} />
-        <Message msgObj={{ msg: "hi", mine: true }} />
         {/* messages window */}
+        {msgs?.map((msgObj, idx) => {
+          return <Message key={idx} msgObj={{ mine: msgObj.username === username, msg: msgObj?.message }} />
+        })}
       </div>
       {/* bottom div */}
       <div style={{

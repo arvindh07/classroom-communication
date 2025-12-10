@@ -3,18 +3,20 @@ import express from "express";
 import fs from "fs";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from "cors";
 
-dotenv.config();
-const app = express();
 const PORT = process.env.PORT || 5555;
+dotenv.config();
+
+const app = express();
 app.use(express.json());
+app.use(cors());
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const usersPath = path.join(__dirname, "/db/users/users.json");
-console.log(__dirname, __filename, usersPath);
 
 app.post("/api/register", (req, res) => {
     const { username } = req.body;

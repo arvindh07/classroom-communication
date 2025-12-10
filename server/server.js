@@ -49,7 +49,7 @@ app.post("/api/register", (req, res) => {
     const users = fs.readFileSync(usersPath);
     const usersJson = JSON.parse(users);
 
-    const findUser = usersJson?.find((user) => user.username === username);
+    const findUser = usersJson?.users?.find((user) => user.username === username);
     if(findUser) {
         return res.json({ message: "Login success" });
     }
